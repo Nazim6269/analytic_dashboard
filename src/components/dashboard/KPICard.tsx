@@ -48,8 +48,6 @@ interface KPICardProps {
 export const KPICard = memo(function KPICard({ data, index = 0 }: KPICardProps) {
   const Icon = useMemo(() => iconMap[data.icon] || TrendingUp, [data.icon]);
   const colors = useMemo(() => colorMap[data.color] || colorMap.indigo, [data.color]);
-  const Icon = iconMap[data.icon] || TrendingUp;
-  const colors = colorMap[data.color] || colorMap.indigo;
 
   return (
     <Card
