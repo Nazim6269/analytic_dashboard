@@ -1,5 +1,6 @@
 "use client";
 
+import React, { memo, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { KPIData } from "@/types";
 import { Card } from "@/components/ui/Card";
@@ -44,7 +45,9 @@ interface KPICardProps {
   index?: number;
 }
 
-export function KPICard({ data, index = 0 }: KPICardProps) {
+export const KPICard = memo(function KPICard({ data, index = 0 }: KPICardProps) {
+  const Icon = useMemo(() => iconMap[data.icon] || TrendingUp, [data.icon]);
+  const colors = useMemo(() => colorMap[data.color] || colorMap.indigo, [data.color]);
   const Icon = iconMap[data.icon] || TrendingUp;
   const colors = colorMap[data.color] || colorMap.indigo;
 
@@ -88,9 +91,9 @@ export function KPICard({ data, index = 0 }: KPICardProps) {
       </div>
     </Card>
   );
-}
+});
 
-export function KPICardSkeleton() {
+export const KPICardSkeleton = memo(function KPICardSkeleton() {
   return (
     <Card>
       <div className="flex items-center justify-between">
@@ -103,4 +106,4 @@ export function KPICardSkeleton() {
       </div>
     </Card>
   );
-}
+});

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { FilterSection } from "@/components/dashboard/FilterSection";
 import { KPISection } from "@/components/dashboard/KPISection";
@@ -10,13 +10,25 @@ import { useDashboardStore } from "@/store/useDashboardStore";
 import { defaultDashboardData } from "@/data/mockData";
 
 export default function Home() {
-  const { data, loading, error, fetchDashboardData } = useDashboardStore();
+  const data = useDashboardStore((state) => state.data);
+  const loading = useDashboardStore((state) => state.loading);
+  const error = useDashboardStore((state) => state.error);
+  const fetchDashboardData = useDashboardStore(
+    (state) => state.fetchDashboardData
+  );
 
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  const dashboardData = data || defaultDashboardData;
+  const dashboardData = useMemo(
+    () => data || defaultDashboardData,
+    [data]
+  );
+
+  const handleRetry = useCallback(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
 
   return (
     <DashboardLayout>
@@ -36,7 +48,7 @@ export default function Home() {
 
         {/* Error State */}
         {error && (
-          <ErrorState message={error} onRetry={fetchDashboardData} />
+          <ErrorState message={error} onRetry={handleRetry} />
         )}
 
         {/* KPI Cards */}
